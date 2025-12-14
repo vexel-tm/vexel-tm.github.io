@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتیجه پرداخت</title>
+
+    <!-- فونت وزیری از CDN رسمی -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --teal       : #0d9488;
+            --teal-light : #14b8a6;
+            --red        : #e11d48;
+            --red-light  : #f43f5e;
+            --dark-gray  : #1f2937;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, var(--dark-gray) 0%, #111827 100%);
+            color: #e5e7eb;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(31, 41, 55, 0.92);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 50px 30px;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(13, 148, 136, 0.3);
+        }
+
+        .icon {
+            font-size: 90px;
+            margin-bottom: 24px;
+            font-weight: 300;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #d1d5db;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 48px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+        }
+
+        /* حالت موفق */
+        .success .icon { color: var(--teal); }
+        .success h1    { color: var(--teal-light); }
+        .success .btn  { background: var(--teal); }
+        .success .btn:hover { background: var(--teal-light); }
+
+        /* حالت ناموفق */
+        .fail .icon    { color: var(--red); }
+        .fail h1       { color: var(--red-light); }
+        .fail .btn     { background: var(--red); }
+        .fail .btn:hover { background: var(--red-light); }
+
+        @media (max-width: 480px) {
+            .container { padding: 40px 20px; }
+            h1 { font-size: 24px; }
+            p { font-size: 16.5px; }
+            .btn { padding: 13px 36px; font-size: 17px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="resultContainer">
+        <div class="icon" id="icon"></div>
+        <h1 id="title"></h1>
+        <p id="message"></p>
+        <a href="tg://resolve?domain=SELF_VEXELBOT" class="btn" target="_blank" id="btn">بازگشت به ربات</a>
+    </div>
+
+    <script>
+        // خواندن پارامتر Status یا status (حساس به بزرگی و کوچکی نیست)
+        const params = new URLSearchParams(window.location.search);
+        const status = (params.get('status') || params.get('Status') || '').toUpperCase();
+
+        const container = document.getElementById('resultContainer');
+        const icon      = document.getElementById('icon');
+        const title     = document.getElementById('title');
+        const message   = document.getElementById('message');
+
+        if (status === 'OK') {
+            container.classList.add('success');
+            icon.innerHTML = '✓';
+            title.textContent = 'پرداخت موفق';
+            message.innerHTML = 'مشتری گرامی، پرداخت شما با موفقیت انجام شد.<br>با استفاده از دکمه زیر به ربات بازگردید';
+        } 
+        else if (status === 'NOK') {
+            container.classList.add('fail');
+            icon.innerHTML = '✕';
+            title.textContent = 'پرداخت ناموفق';
+            message.innerHTML = 'متأسفانه پرداخت انجام نشد.<br>لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.';
+        } 
+        else {
+            container.classList.add('fail');
+            icon.innerHTML = '؟';
+            title.textContent = 'خطا در پردازش';
+            message.textContent = 'وضعیت پرداخت مشخص نیست. لطفاً با پشتیبانی تماس بگیرید.';
+        }
+    </script>
+
+</body>
+</html>
